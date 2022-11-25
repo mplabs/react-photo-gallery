@@ -1,21 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import jsonp from 'jsonp';
-import ExampleBasic from './ExampleBasic';
-import ExampleWithLightbox from './ExampleWithLightbox';
-import ExampleCustomComponentSelection from './ExampleCustomComponentSelection';
-import ExampleSortable from './ExampleSortable';
-import ExampleDynamicLoading from './ExampleDynamicLoading';
-import ExampleDynamicColumns from './ExampleDynamicColumns';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import jsonp from 'jsonp'
+import ExampleBasic from './ExampleBasic'
+import ExampleWithLightbox from './ExampleWithLightbox'
+import ExampleCustomComponentSelection from './ExampleCustomComponentSelection'
+import ExampleSortable from './ExampleSortable'
+import ExampleDynamicLoading from './ExampleDynamicLoading'
+import ExampleDynamicColumns from './ExampleDynamicColumns'
 
 class App extends React.Component {
   constructor() {
-    super();
-    this.state = { width: -1 };
-    this.loadPhotos = this.loadPhotos.bind(this);
+    super()
+    this.state = { width: -1 }
+    this.loadPhotos = this.loadPhotos.bind(this)
   }
   componentDidMount() {
-    this.loadPhotos();
+    this.loadPhotos()
   }
   loadPhotos() {
     const urlParams = {
@@ -25,16 +25,17 @@ class App extends React.Component {
       format: 'json',
       per_page: '120',
       extras: 'url_m,url_c,url_l,url_h,url_o',
-    };
+    }
 
-    let url = 'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos';
+    let url =
+      'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos'
     url = Object.keys(urlParams).reduce((acc, item) => {
-      return acc + '&' + item + '=' + urlParams[item];
-    }, url);
+      return acc + '&' + item + '=' + urlParams[item]
+    }, url)
 
     jsonp(url, { name: 'jsonFlickrApi' }, (err, data) => {
-      let photos = data.photoset.photo.map(item => {
-        let aspectRatio = parseFloat(item.width_o / item.height_o);
+      let photos = data.photoset.photo.map((item) => {
+        let aspectRatio = parseFloat(item.width_o / item.height_o)
         return {
           src: item.url_l,
           width: parseInt(item.width_o),
@@ -49,28 +50,40 @@ class App extends React.Component {
             `${item.url_h} ${item.width_h}w`,
           ],
           sizes: '(min-width: 480px) 50vw, (min-width: 1024px) 33.3vw, 100vw',
-        };
-      });
+        }
+      })
       this.setState({
         photos: this.state.photos ? this.state.photos.concat(photos) : photos,
-      });
-    });
+      })
+    })
   }
 
   render() {
     if (this.state.photos) {
-      const width = this.state.width;
+      const width = this.state.width
       return (
         <div className="App">
-          <ExampleBasic title={'Basic Row Layout'} photos={this.state.photos.slice(0, 20)} />
-          <ExampleBasic title={'Basic Column Layout'} direction="column" photos={this.state.photos.slice(40, 60)} />
+          <ExampleBasic
+            title={'Basic Row Layout'}
+            photos={this.state.photos.slice(0, 20)}
+          />
+          <ExampleBasic
+            title={'Basic Column Layout'}
+            direction="column"
+            photos={this.state.photos.slice(40, 60)}
+          />
           <ExampleWithLightbox photos={this.state.photos.slice(60, 75)} />
-          <ExampleCustomComponentSelection photos={this.state.photos.slice(75, 90)} />
+          <ExampleCustomComponentSelection
+            photos={this.state.photos.slice(75, 90)}
+          />
           <ExampleSortable photos={this.state.photos.slice(90, 100)} />
-          <ExampleDynamicColumns title={'Custom Dynamic Columns'} photos={this.state.photos.slice(100, 120)} />
+          <ExampleDynamicColumns
+            title={'Custom Dynamic Columns'}
+            photos={this.state.photos.slice(100, 120)}
+          />
           <ExampleDynamicLoading photos={this.state.photos} />
         </div>
-      );
+      )
     } else {
       return (
         <div className="App">
@@ -78,8 +91,13 @@ class App extends React.Component {
             Loading
           </div>
         </div>
-      );
+      )
     }
   }
 }
-ReactDOM.render(<App />, document.getElementById('app'));
+const root = ReactDOM.createRoot(document.getElementById('app'))
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
