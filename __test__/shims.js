@@ -1,9 +1,9 @@
-global.requestAnimationFrame = callback => {
-  callback();
-};
-global.cancelAnimationFrame = () => true;
+global.requestAnimationFrame = (callback) => {
+  callback()
+}
+global.cancelAnimationFrame = () => true
 global.ResizeObserver = function ResizeObserver(callback) {
-  this.disconnect = () => {};
+  this.disconnect = () => {}
   this.observe = () => {
     callback([
       {
@@ -11,6 +11,6 @@ global.ResizeObserver = function ResizeObserver(callback) {
           width: 1140,
         },
       },
-    ]);
-  };
-};
+    ])
+  }
+}
